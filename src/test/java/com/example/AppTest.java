@@ -35,4 +35,12 @@ class AppTest {
         assertEquals("&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt;",
                 App.escapeHtml("<script>alert(\"x\")</script>"));
     }
+
+    @Test
+    void renderConfirmationHtmlIncludesStudentDetails() {
+        String html = App.renderConfirmationHtml("Divyansh", "21CS101", "divyansh@example.com", "B.Tech CSE");
+        assertTrue(html.contains("Registration Successful"));
+        assertTrue(html.contains("Divyansh"));
+        assertTrue(html.contains("21CS101"));
+    }
 }

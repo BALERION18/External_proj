@@ -60,7 +60,12 @@ public class App {
         String email = escapeHtml(fields.getOrDefault("email", ""));
         String course = escapeHtml(fields.getOrDefault("course", ""));
 
-        String responseHtml = """
+        String responseHtml = renderConfirmationHtml(studentName, rollNumber, email, course);
+        sendHtml(exchange, 200, responseHtml);
+    }
+
+    static String renderConfirmationHtml(String studentName, String rollNumber, String email, String course) {
+        return """
                 <!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -77,17 +82,19 @@ public class App {
                 <body>
                     <div class="card">
                         <h2>Registration Successful</h2>
-                        <p><strong>Student Name:</strong> %s</p>
-                        <p><strong>Roll Number:</strong> %s</p>
-                        <p><strong>Email:</strong> %s</p>
-                        <p><strong>Course:</strong> %s</p>
+                        <p><strong>Student Name:</strong> {{studentName}}</p>
+                        <p><strong>Roll Number:</strong> {{rollNumber}}</p>
+                        <p><strong>Email:</strong> {{email}}</p>
+                        <p><strong>Course:</strong> {{course}}</p>
                         <a href="/">Register Another Student</a>
                     </div>
                 </body>
                 </html>
-                """.formatted(studentName, rollNumber, email, course);
-
-        sendHtml(exchange, 200, responseHtml);
+                """
+                .replace("{{studentName}}", studentName)
+                .replace("{{rollNumber}}", rollNumber)
+                .replace("{{email}}", email)
+                .replace("{{course}}", course);
     }
 
     static String loadResource(String path) throws IOException {
